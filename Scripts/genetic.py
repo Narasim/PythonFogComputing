@@ -30,7 +30,7 @@ class Genetic():
         
     def run_genetic(self):
         no_of_nextgen_plans = 0 # No. of plans that qualified the state check
-        for i in range(50):#self.no_of_genetic_plans): Generate random plans
+        for i in range(self.no_of_genetic_plans):#self.no_of_genetic_plans): Generate random plans
             for j in range(self.plan_size):
                 if(j%self.apps_count == 0 or j%self.apps_count == self.modules_in_app-1): # Check whether the module is sense or actuation
                     device = random.randint(3,12) # Place sense and actuation in Fog Nodes
@@ -70,7 +70,7 @@ class Genetic():
         next_gen_plans_fitness = []
         for i in range(no_of_nextgen_plans):
             next_gen_plans_fitness.append(self.calculate_fitness(genetic_resptime[i]))
-        print(next_gen_plans_fitness)
+#        print(next_gen_plans_fitness)
         j = 0
         while(j < 5):
 #        fitness of the nextgen plan's sorted indices are rturned
@@ -93,12 +93,16 @@ class Genetic():
 #                print(next_gen_plans_fitness[i])
             j = j + 1
         print("Plan = ", self.nextgen_plans[sorted_indices[0]].get_plan())
+        print("App-wise Makespan Time: ",genetic_mkspan[sorted_indices[0]])
+        print("Overall Makespan Time: ", np.sum(genetic_mkspan[sorted_indices[0]]))
+        print("Deployment Time: ",genetic_dptime[sorted_indices[0]])
         print("Response Time = ", genetic_resptime[sorted_indices[0]])
         print("Fitness = ", next_gen_plans_fitness[sorted_indices[0]])
         print("Deadline - Response Time = ")
         for i in range(self.apps_count):
             print(self.apps[i].get_deadline() - genetic_resptime[sorted_indices[0]][i])
         run_method.calculate_utilization(self.nextgen_plans[sorted_indices[0]].get_plan(), self.apps_count, self.modules_in_app)
+        run_method.energy_consumption(self.nextgen_plans[sorted_indices[0]].get_plan(), self.apps_count, self.modules_in_app, self.each_device_count,1)
             
         
     
@@ -108,8 +112,9 @@ class Genetic():
         self.apps = apps
 #        print(self.devices[1].get_amips())
 #        print(self.random_plan_i)
+        j = 0
         for i in self.random_plan_i: # foe each element in the random plan recieved
-            j = 0
+#            print(i,j)
 #            print(self.new_devices[i].get_amips() , self.apps[int(j/5)].modules[int(j%5)].get_required_mips())
             if(self.new_devices[i].get_amips() < self.apps[int(j/5)].modules[int(j%5)].get_required_mips()):
 #            If the required MIPS greater than the avalable MIPS then the check fails(0)
@@ -143,7 +148,7 @@ class Genetic():
             if((stuff_loc % self.apps_count) == 0 or (stuff_loc % self.apps_count) == 4):
                 stuff_val = random.randint(3,sum(self.each_device_count[3:])) # Device number to stuff
             else:
-                stuff_val = random.randint(0,sum(self.each_device_count)) # Device number to stuff
+                stuff_val = random.randint(0,2) # Device number to stuff
             
             for i in range(self.plan_size):
                 if(i == stuff_loc):

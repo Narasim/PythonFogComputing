@@ -6,6 +6,7 @@ Created on Fri Feb  5 17:56:20 2021
 """
 
 import plan
+import run_method
 class Cloudonly():
     def __init__(self, devices, apps, apps_count, modules_in_app, each_device_count, plan_size):
         self.devices = devices
