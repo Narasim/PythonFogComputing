@@ -54,7 +54,6 @@ class Applications():
             self.required_ram = 0
             self.required_storage = 0
             self.m_id = 0
-            self.mk_span = 0
             
         def set_required_mips(self, required_mips):
             self.required_mips = required_mips
@@ -75,11 +74,7 @@ class Applications():
             self.m_id = m_id
         def get_m_id(self):
             return self.m_id
-        
-        def set_mk_span(self, mk_span):
-            self.mk_span = mk_span
-        def get_mk_span(self):
-            return self.mk_span
+
         
         
             

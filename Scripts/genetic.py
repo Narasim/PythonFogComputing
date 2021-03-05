@@ -29,13 +29,22 @@ class Genetic():
         self.nextgen_plans = []
         
     def run_genetic(self):
+        pri = []
+        for i in range(self.apps_count):
+            pri.append(self.apps[i].get_deadline() - self.apps[i].get_deployment_time())
+        sort_pri = np.argsort(pri)
+#        print(sort_pri)
         no_of_nextgen_plans = 0 # No. of plans that qualified the state check
         for i in range(self.no_of_genetic_plans):#self.no_of_genetic_plans): Generate random plans
             for j in range(self.plan_size):
-                if(j%self.apps_count == 0 or j%self.apps_count == self.modules_in_app-1): # Check whether the module is sense or actuation
-                    device = random.randint(3,12) # Place sense and actuation in Fog Nodes
+                if(int(j/5) == sort_pri[0] and (j%5 != 0 and j%5 != 4)):
+                    device = 1
                 else:
-                    device = random.randint(0,2) # Place the process modules in FCN, NFCN or Cloud
+                    if(j%5 == 0 or j%5 == 4): # Check whether the module is sense or actuation
+                        device = random.randint(3,12) # Place sense and actuation in Fog Nodes
+                    else:
+                        device = random.randint(0,2) # Place the process modules in FCN, NFCN or Cloud
+#                print(device)
 #                 random_palns[] is the plans generated randomly
                 self.init_gen_plans[i].update_plan(device, j) # preparing the plans
 #            print(self.init_gen_plans[i].get_plan())
@@ -47,7 +56,7 @@ class Genetic():
 #                print(self.nextgen_plans[no_of_nextgen_plans].get_plan())
                 no_of_nextgen_plans = no_of_nextgen_plans + 1 # Counting the no. of plans qualified state check
 
-        print(no_of_nextgen_plans)
+#        print(no_of_nextgen_plans)
         # Prints all the next generation plans
 #        for i in range(no_of_nextgen_plans):
 #            print(self.nextgen_plans[i].get_plan())
@@ -72,7 +81,7 @@ class Genetic():
             next_gen_plans_fitness.append(self.calculate_fitness(genetic_resptime[i]))
 #        print(next_gen_plans_fitness)
         j = 0
-        while(j < 5):
+        while(j < 50):
 #        fitness of the nextgen plan's sorted indices are rturned
             sorted_indices = np.argsort(next_gen_plans_fitness)
 #            for i in sorted_indices:
@@ -146,7 +155,7 @@ class Genetic():
         while(True):
             stuff_loc = random.randint(0,self.plan_size-1) # location to stuff
             if((stuff_loc % self.apps_count) == 0 or (stuff_loc % self.apps_count) == 4):
-                stuff_val = random.randint(3,sum(self.each_device_count[3:])) # Device number to stuff
+                stuff_val = random.randint(3,12) # Device number to stuff
             else:
                 stuff_val = random.randint(0,2) # Device number to stuff
             

@@ -22,9 +22,11 @@ class Makespan():
         self.plan = plan
         self.apps_count = 5
         self.modules_in_app = 5
+        self.each_device_count = [1,1,1,10]
         self.apps = load_data.create_load_applications(self.apps_count, self.modules_in_app)
         self.app_mkspan = []
         self.distances = load_data.load_distances()
+        self.devices = load_data.create_load_devices(self.each_device_count)
         
     
     def calculate_mkspan(self):
@@ -35,16 +37,16 @@ class Makespan():
 #        total_mkspan = 0 # This variable is used to update the overall makespan time(self.makespan_time)
         for i in range(self.apps_count * self.modules_in_app): # Iterate for the entire plan
             if self.plan[i] == 0: # If placed in Cloud
-                self.makespan_time = self.makespan_time + self.apps[int(i/5)].modules[i%5].get_mk_span() + (2*self.distances.get_dist_to_cloud())
+                self.makespan_time = self.makespan_time + (self.apps[int(i/5)].modules[i%5].get_required_mips()/self.devices[0].get_amips()) + (2*self.distances.get_dist_to_cloud())
 #                print("i = ", i, "plan val = ", self.plan[i], "makespan_time = ", self.makespan_time, "distance = ", (2*self.distances.get_dist_to_cloud()))
             elif self.plan[i] == 1: # If placed in Fog Orchestration Node(FCN)
-                self.makespan_time = self.makespan_time + self.apps[int(i/5)].modules[int(i%5)].get_mk_span()
+                self.makespan_time = self.makespan_time + (self.apps[int(i/5)].modules[i%5].get_required_mips()/self.devices[1].get_amips())
 #                print(i, self.plan[i], self.makespan_time)
             elif self.plan[i] == 2: # If placed in Neighbor Fog Orchestration Node(NFCN)
-                self.makespan_time = self.makespan_time + self.apps[int(i/5)].modules[int(i%5)].get_mk_span() + (2*self.distances.get_dist_to_NFCN())
+                self.makespan_time = self.makespan_time + (self.apps[int(i/5)].modules[i%5].get_required_mips()/self.devices[2].get_amips()) + (2*self.distances.get_dist_to_NFCN())
 #                print(print(i, self.plan[i], self.makespan_time, (2*self.distances.get_dist_to_NFCN())))
             else : # If placed in Fog Node
-                self.makespan_time = self.makespan_time + self.apps[int(i/5)].modules[int(i%5)].get_mk_span() + (self.distances.get_dist_to_fognode())
+                self.makespan_time = self.makespan_time + (self.apps[int(i/5)].modules[i%5].get_required_mips()/self.devices[3].get_amips()) + (self.distances.get_dist_to_fognode())
 #                print(i, self.plan[i], self.makespan_time, (2*self.distances.get_dist_to_fognode()))
             if i%5 == 4: # To calcuate each app's makespan time
 #                print(self.makespan_time)

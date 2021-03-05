@@ -24,7 +24,7 @@ class FogCloud():
 #            Findind the paramater for app priority
             app_unsorted[i] = self.apps[i].get_deadline() - self.apps[i].get_deployment_time()
         app_sorted = dict(sorted(app_unsorted.items(), key=lambda item: item[1])) # Sorting the apps based on the parameter obtained above
-#        print(app_sorted) # Sorted apps
+        print(app_sorted) # Sorted apps
 #        print(app_sorted.keys()) # Sorted apps keys
         
 #        We run the through all the app's sensing and actuation modules 
@@ -34,7 +34,7 @@ class FogCloud():
                 module_no = self.apps[i].modules[j].get_m_id()%(self.apps_count) # Find the module ID
                 if(module_no == 0 or module_no == 4): # Check whether it is sensing or actuation
                     for k in range(3,13): # Place the modules in the lower fog nodes, which range from 3 to 12
-#                        print(k, self.devices[k].get_amips(), self.apps[i].modules[j].get_required_mips(),self.devices[k].get_device_availability(),i*5+j,self.plan_size)                        
+#                        print(i,k, self.devices[k].get_amips(), self.apps[i].modules[j].get_required_mips(),self.devices[k].get_device_availability(),i*5+j,self.plan_size)                        
 #                        if(self.devices[k].get_device_availability() == 1):
                         if(self.devices[k].get_amips() >= self.apps[i].modules[j].get_required_mips()): # If available MIPS >= modules required MIPS
                             self.devices[k].set_amips(self.devices[k].get_amips() - self.apps[i].modules[j].get_required_mips()) # Modufy the available MIPS of the device to latest
@@ -51,7 +51,7 @@ class FogCloud():
                     iter = 0
                     while(iter < 2 and placed == 0): # Try to place the current module in two iterations, if not placed in the first iteration we place it in the second iteration
                         for k in range(3,13): # Trying to place in the lower fog nodes
-    #                        print(k, self.devices[k].get_amips(), self.apps[i].modules[j].get_required_mips(),self.devices[k].get_device_availability(),i*5+j,self.plan_size)                        
+#                            print(i,k, self.devices[k].get_amips(), self.apps[i].modules[j].get_required_mips(),self.devices[k].get_device_availability(),i*5+j,self.plan_size)                        
     #                        if(self.devices[k].get_device_availability() == 1):
                             if(self.devices[k].get_amips() >= self.apps[i].modules[j].get_required_mips()):
                                 self.devices[k].set_amips(self.devices[k].get_amips() - self.apps[i].modules[j].get_required_mips())

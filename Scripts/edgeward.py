@@ -37,7 +37,7 @@ class Edgeward():
 #                        print(k, self.devices[k].get_amips(), self.apps[i].modules[j].get_required_mips(),self.devices[k].get_device_availability(),i*5+j,self.plan_size)                        
 #                        if(self.devices[k].get_device_availability() == 1):
                         if(self.devices[k].get_amips() >= self.apps[i].modules[j].get_required_mips()): # If available MIPS >= modules required MIPS
-                            self.devices[k].set_amips(self.devices[k].get_amips() - self.apps[i].modules[j].get_required_mips()) # Modufy the available MIPS of the device to latest
+                            self.devices[k].set_amips(self.devices[k].get_amips() - self.apps[i].modules[j].get_required_mips()) # Modify the available MIPS of the device to latest
                             edgeward_plan.update_plan(k, (i*5)+j) # Update the plan with the current placement
 #                            print(k, (i*5)+j)
                             break # Go to nect module in the app
